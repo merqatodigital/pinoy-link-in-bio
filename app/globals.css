@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7f5;
+  --foreground: #17211b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+.phone-frame {
+  box-shadow: 0 28px 70px rgb(0 0 0 / 0.28);
+}
+
+.phone-content {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.phone-content::-webkit-scrollbar { width: 4px; }
+.phone-content::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }

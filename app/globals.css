@@ -18,6 +18,7 @@
 
 html {
   background: var(--background);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -55,6 +56,14 @@ a {
 .phone-frame *::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 999px;
+}
+
+@media (max-width: 767px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

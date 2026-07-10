@@ -1,8 +1,10 @@
-export type ThemeId = "island" | "fiesta" | "midnight";
+export type ThemeId = "ube" | "jeepney" | "boracay" | "barong";
 
-export type EditorSection = "page" | "blocks" | "appearance" | "settings";
+export type EditorSection = "ai" | "page" | "blocks" | "appearance" | "settings";
 
-export type BlockKind = "product" | "link";
+export type MagicPreset = "creator" | "food" | "beauty" | "stay" | "shop";
+
+export type BlockKind = "product" | "link" | "video" | "review";
 
 export type StoreBlock = {
   id: string;
@@ -14,6 +16,7 @@ export type StoreBlock = {
   url: string;
   price?: number;
   badge?: string;
+  rating?: number;
   visible: boolean;
   featured: boolean;
 };
@@ -24,7 +27,12 @@ export type StoreProfile = {
   bio: string;
   location: string;
   avatarUrl: string;
+  coverUrl: string;
   verified: boolean;
+  trustEnabled: boolean;
+  sukiScore: number;
+  reviewCount: number;
+  soundEnabled: boolean;
   themeId: ThemeId;
   messengerUrl: string;
   whatsappUrl: string;
@@ -47,4 +55,5 @@ export type BayanTheme = {
   primary: string;
   accent: string;
   buttonText: string;
+  heroOverlay: string;
 };

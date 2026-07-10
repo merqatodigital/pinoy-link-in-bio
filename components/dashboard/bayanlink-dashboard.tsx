@@ -11,8 +11,11 @@ function cloneDefaultStore(): StorefrontConfig {
   return JSON.parse(JSON.stringify(defaultStore)) as StorefrontConfig;
 }
 
+type WorkspaceView = "edit" | "preview";
+
 export function BayanLinkDashboard() {
   const [active, setActive] = useState<EditorSection>("blocks");
+  const [workspaceView, setWorkspaceView] = useState<WorkspaceView>("edit");
   const [store, setStore] = useState<StorefrontConfig>(cloneDefaultStore);
   const [hydrated, setHydrated] = useState(false);
   const [copyLabel, setCopyLabel] = useState("Copy my link");
@@ -39,6 +42,11 @@ export function BayanLinkDashboard() {
   }, [hydrated, store]);
 
   const publicPath = useMemo(() => `/${store.profile.username || "my-store"}`, [store.profile.username]);
+
+  function selectSection(section: EditorSection) {
+    setActive(section);
+    setWorkspaceView("edit");
+  }
 
   function updateProfile<K extends keyof StoreProfile>(key: K, value: StoreProfile[K]) {
     setStore((current) => ({ ...current, profile: { ...current.profile, [key]: value } }));
@@ -115,42 +123,58 @@ export function BayanLinkDashboard() {
   }
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f5f6f3] text-slate-950">
-      <div className="grid min-h-screen lg:grid-cols-[230px_minmax(0,1fr)]">
-        <Sidebar active={active} onChange={setActive} username={store.profile.username} onCopy={copyLink} copyLabel={copyLabel} />
+    <main className="min-h-screen overflow-x-hidden bg-[#f5f6f3] pb-24 text-slate-950 md:pb-0">
+      <Sidebar active={active} onChange={selectSection} username={store.profile.username} onCopy={copyLink} copyLabel={copyLabel} />
 
-        <div className="min-w-0 p-3 sm:p-5 xl:p-7">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm lg:hidden">
-            <div className="min-w-0">
-              <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-700">Live address</p>
-              <p className="truncate text-sm font-bold">bayanlink.ph/{store.profile.username}</p>
-            </div>
-            <button onClick={copyLink} className="rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white">{copyLabel}</button>
+      <div className="xl:pl-[230px]">
+        <div className="min-w-0 p-3 sm:p-5 lg:p-6 xl:p-7">
+          <div className="mx-auto mb-4 grid w-full max-w-[1500px] grid-cols-2 rounded-2xl bg-slate-200/75 p-1 xl:hidden">
+            <button
+              type="button"
+              onClick={() => setWorkspaceView("edit")}
+              className={`rounded-xl px-4 py-3 text-sm font-bold transition ${
+                workspaceView === "edit" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500"
+              }`}
+            >
+              Edit storefront
+            </button>
+            <button
+              type="button"
+              onClick={() => setWorkspaceView("preview")}
+              className={`rounded-xl px-4 py-3 text-sm font-bold transition ${
+                workspaceView === "preview" ? "bg-white text-slate-950 shadow-sm" : "text-slate-500"
+              }`}
+            >
+              Live preview
+            </button>
           </div>
 
           <div className="mx-auto grid w-full max-w-[1500px] gap-5 xl:grid-cols-[minmax(560px,1fr)_390px]">
-            <EditorPanel
-              active={active}
-              store={store}
-              onProfileChange={updateProfile}
-              onBlockChange={updateBlock}
-              onAddBlock={addBlock}
-              onRemoveBlock={removeBlock}
-              onMoveBlock={moveBlock}
-              onReset={resetStore}
-            />
+            <div className={workspaceView === "edit" ? "block" : "hidden xl:block"}>
+              <EditorPanel
+                active={active}
+                store={store}
+                onProfileChange={updateProfile}
+                onBlockChange={updateBlock}
+                onAddBlock={addBlock}
+                onRemoveBlock={removeBlock}
+                onMoveBlock={moveBlock}
+                onReset={resetStore}
+              />
+            </div>
 
-            <aside className="min-w-0 xl:sticky xl:top-7 xl:self-start">
-              <div className="mb-3 flex items-center justify-between px-1">
-                <div>
+            <aside className={`${workspaceView === "preview" ? "block" : "hidden"} min-w-0 xl:sticky xl:top-7 xl:block xl:self-start`}>
+              <div className="mb-3 flex items-center justify-between gap-3 px-1">
+                <div className="min-w-0">
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">Customer view</p>
-                  <p className="mt-0.5 text-sm font-bold text-slate-800">Live mobile preview</p>
+                  <p className="mt-0.5 truncate text-sm font-bold text-slate-800">bayanlink.ph/{store.profile.username || "my-store"}</p>
                 </div>
-                <a href={publicPath} target="_blank" rel="noreferrer" className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">Open page ↗</a>
+                <a href={publicPath} target="_blank" rel="noreferrer" className="shrink-0 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm">Open page ↗</a>
               </div>
-              <div className="phone-frame mx-auto w-full max-w-[390px] rounded-[46px] border-[10px] border-slate-950 bg-slate-950 p-1 shadow-[0_30px_80px_rgba(15,23,42,0.28)]">
-                <div className="max-h-[790px] overflow-y-auto overflow-x-hidden rounded-[33px] bg-white">
-                  <div className="sticky top-0 z-10 mx-auto -mb-7 mt-2 h-6 w-28 rounded-full bg-slate-950" />
+
+              <div className="phone-frame mx-auto w-full max-w-[430px] overflow-hidden rounded-[30px] bg-white shadow-[0_24px_70px_rgba(15,23,42,0.18)] sm:rounded-[46px] sm:border-[10px] sm:border-slate-950 sm:bg-slate-950 sm:p-1 xl:max-w-[390px]">
+                <div className="overflow-visible rounded-[30px] bg-white sm:max-h-[790px] sm:overflow-y-auto sm:overflow-x-hidden sm:rounded-[33px]">
+                  <div className="sticky top-0 z-10 mx-auto -mb-7 mt-2 hidden h-6 w-28 rounded-full bg-slate-950 sm:block" />
                   <Storefront store={store} compact />
                 </div>
               </div>

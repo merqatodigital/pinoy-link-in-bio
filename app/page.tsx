@@ -63,9 +63,9 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 p-4 text-slate-900 md:p-8">
-      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1fr_420px]">
-        <section className="rounded-[28px] bg-white p-5 shadow-2xl md:p-8">
+    <main className="min-h-screen overflow-x-hidden bg-slate-950 py-4 text-slate-900 md:py-8">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 px-4 lg:grid-cols-[minmax(0,1fr)_380px]">
+        <section className="min-w-0 rounded-[28px] bg-white p-5 shadow-2xl md:p-8">
           <div className="mb-8 flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
@@ -161,22 +161,22 @@ export default function Home() {
 
           <div className="mt-4 space-y-3">
             {products.map((product) => (
-              <div key={product.id} className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-[1fr_1fr_130px_auto]">
+              <div key={product.id} className="grid gap-3 rounded-2xl border border-slate-200 p-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_110px_auto]">
                 <input
                   value={product.title}
                   onChange={(event) => updateProduct(product.id, "title", event.target.value)}
-                  className="rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
+                  className="min-w-0 rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
                 />
                 <input
                   value={product.subtitle}
                   onChange={(event) => updateProduct(product.id, "subtitle", event.target.value)}
-                  className="rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
+                  className="min-w-0 rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
                 />
                 <input
                   type="number"
                   value={product.price}
                   onChange={(event) => updateProduct(product.id, "price", event.target.value)}
-                  className="rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
+                  className="min-w-0 rounded-xl bg-slate-50 px-3 py-2 text-sm outline-none"
                 />
                 <button
                   onClick={() => setProducts((current) => current.filter((item) => item.id !== product.id))}
@@ -189,7 +189,7 @@ export default function Home() {
           </div>
         </section>
 
-        <aside className="lg:sticky lg:top-8 lg:self-start">
+        <aside className="w-full lg:sticky lg:top-8 lg:self-start">
           <div className="phone-frame mx-auto w-full max-w-[380px] rounded-[42px] border-[10px] border-black bg-black p-1">
             <div
               className="phone-content min-h-[720px] overflow-hidden rounded-[30px] p-5"
